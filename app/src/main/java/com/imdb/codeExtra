@@ -1,0 +1,91 @@
+App Icon :
+    Toolbar toolbar = (Toolbar) findViewById(R.id.tool1);
+    setSupportActionBar(toolbar);
+    Remove title by getSupportActionBar().setDisplayShowTitleEnabled(false);
+    Add your logo in drawable folder in res/drawable.
+    Add logo using toolbar.setLogo(R.drawable.ic_launcher);
+..........................................................................................
+view pager adapter
+http://codetheory.in/android-image-slideshow-using-viewpager-pageradapter/
+https://www.journaldev.com/10096/android-viewpager-example-tutorial
+
+//------------------------------------
+
+package com.imdb.adapter;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.imdb.R;
+import com.imdb.model.Data_Model;
+
+import java.util.ArrayList;
+
+/**
+ * Created by SONU on 25/09/15.
+ */
+public class RecyclerView_Adapter extends RecyclerView.Adapter <RecyclerView_Adapter.RecyclerViewHolder> {// Recyclerview will extend to
+    // recyclerview adapter
+    private ArrayList <Data_Model> arrayList;
+    private Context context;
+
+    public RecyclerView_Adapter(Context context, ArrayList <Data_Model> arrayList) {
+        this.context = context;
+        this.arrayList = arrayList;
+    }
+
+    @Override
+    public int getItemCount() {
+        return (null != arrayList ? arrayList.size() : 0);
+
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerViewHolder holder, int position) {
+        final Data_Model model = arrayList.get(position);
+
+        RecyclerViewHolder mainHolder = (RecyclerViewHolder) holder;// holder
+
+        Bitmap image = BitmapFactory.decodeResource(context.getResources(), model.getImage());// This will convert drawbale image into
+        // bitmap
+
+        // setting title
+        mainHolder.title.setText(model.getTitle());
+
+        mainHolder.imageview.setImageBitmap(image);
+
+
+    }
+
+    @Override
+    public RecyclerViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+
+        // This method will inflate the custom layout and return as viewholder
+        LayoutInflater mInflater = LayoutInflater.from(viewGroup.getContext());
+        ViewGroup mainGroup = (ViewGroup) mInflater.inflate(R.layout.item_row, viewGroup, false);
+        RecyclerViewHolder listHolder = new RecyclerViewHolder(mainGroup);
+        return listHolder;
+    }
+
+    public class RecyclerViewHolder extends RecyclerView.ViewHolder {
+        public TextView title;
+        public ImageView imageview;
+
+        public RecyclerViewHolder(View view) {
+            super(view);
+            this.title = (TextView) view.findViewById(R.id.title);
+            this.imageview = (ImageView) view.findViewById(R.id.image);
+        }
+    }
+
+
+}
+
+//------------------------------------
