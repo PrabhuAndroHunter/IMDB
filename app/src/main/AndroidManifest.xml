@@ -25,7 +25,8 @@
         <activity android:name=".activity.HomeScreenActivity" />
         <activity
             android:name=".activity.TrailerPlayerActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activity.ViewAllMovieActivity"></activity>
     </application>
 
 </manifest>

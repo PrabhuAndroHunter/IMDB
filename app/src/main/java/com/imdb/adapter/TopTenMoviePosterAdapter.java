@@ -42,15 +42,15 @@ import java.util.List;
  * Created by prabhu on 20/3/18.
  */
 
-public class ImagePagerAdapter extends PagerAdapter {
-    private final String TAG = ImagePagerAdapter.class.toString();
+public class TopTenMoviePosterAdapter extends PagerAdapter {
+    private final String TAG = TopTenMoviePosterAdapter.class.toString();
 
     Context mContext;
     LayoutInflater mLayoutInflater;
-    List <Movie> topFivePosters = new ArrayList <Movie>();
+    List <Movie> topTenPosters = new ArrayList <Movie>();
     private HomeScreenActivity parentActivity;
 
-    public ImagePagerAdapter(Context context) {
+    public TopTenMoviePosterAdapter(Context context) {
         mContext = context;
         parentActivity = (HomeScreenActivity) context;
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -58,7 +58,7 @@ public class ImagePagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return topFivePosters.size();
+        return topTenPosters.size();
     }
 
     @Override
@@ -69,7 +69,7 @@ public class ImagePagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.item_pager, container, false);
-        final Movie curMovie = topFivePosters.get(position);
+        final Movie curMovie = topTenPosters.get(position);
         ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView);
         TextView textView = (TextView) itemView.findViewById(R.id.textview_movie_name);
 
@@ -105,8 +105,8 @@ public class ImagePagerAdapter extends PagerAdapter {
         container.removeView((RelativeLayout) object);
     }
 
-    public void setTopFivePosters(List <Movie> topFivePosters) {
-        this.topFivePosters = topFivePosters;
+    public void setTopTenPosters(List <Movie> topTenPosters) {
+        this.topTenPosters = topTenPosters;
         notifyDataSetChanged();
     }
 

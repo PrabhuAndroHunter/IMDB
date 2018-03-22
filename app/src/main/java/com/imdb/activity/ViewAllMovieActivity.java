@@ -1,0 +1,72 @@
+package com.imdb.activity;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+
+import com.imdb.R;
+import com.imdb.adapter.ViewAllMovieAdapter;
+import com.imdb.adapter.RecyclerViewAdapter;
+import com.imdb.model.Movie;
+import com.imdb.network.RequestHelper;
+import com.imdb.network.ResponseListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ViewAllMovieActivity extends AppCompatActivity implements ResponseListener {
+    private final String TAG = ViewAllMovieActivity.class.toString();
+    private RecyclerView mviewAllMovieRv;
+    private ViewAllMovieAdapter viewAllMovieAdapter;
+    List <Movie> viewAllMovieList;
+    private String tag;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_view_all_movie);
+        tag = getIntent().getStringExtra("TAG");
+        Log.d(TAG, "onCreate: tag : " + tag);
+        mviewAllMovieRv = (RecyclerView) findViewById(R.id.view_all_movie);
+        mviewAllMovieRv.setLayoutManager(new LinearLayoutManager(this));
+        viewAllMovieAdapter = new ViewAllMovieAdapter(this, RecyclerViewAdapter.TOP_RATED_MOVIE);
+        mviewAllMovieRv.setAdapter(viewAllMovieAdapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        switch (tag) {
+            case "Now Playing":
+                Log.d(TAG, "tag: now playing");
+                RequestHelper.getNowPlayingMovies(this);
+                break;
+            case "Top Rating":
+                Log.d(TAG, "tag: top rating");
+                RequestHelper.getTopRatedMovies(this);
+                break;
+            case "UpComing":
+                Log.d(TAG, "tag: upcoming");
+                RequestHelper.getUpcomingMovies(this);
+                break;
+            case "Most Populer":
+                Log.d(TAG, "tag: most popular");
+                RequestHelper.getMostPopularMovies(this);
+                break;
+        }
+    }
+
+    @Override
+    public void searchDone(Object object, String tag) {
+
+        viewAllMovieList = (ArrayList <Movie>) object;
+        viewAllMovieAdapter.refreshUI(viewAllMovieList);
+    }
+
+    @Override
+    public void searchFail(String error, String tag) {
+        Log.d(TAG, "searchFail: nowPlayingMovieList " + error);
+    }
+}

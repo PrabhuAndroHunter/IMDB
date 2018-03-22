@@ -23,6 +23,8 @@ import com.imdb.model.Movie;
 import com.imdb.model.Trailer;
 import com.imdb.network.Url;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +34,7 @@ public class TrailerPlayerActivity extends YouTubeBaseActivity implements YouTub
 
     private final String TAG = TrailerPlayerActivity.class.toString();
     YouTubePlayerView playerView;
-    private TextView mVoteTv, mRatingTv, mDescriptionTv, mReleaseDate;
+    private TextView mVoteTv, mRatingTv, mRateThisTv, mShareTv, mWatchLater, mDescriptionTv, mReleaseDate;
     YouTubePlayer player;
     private RecyclerView mTrailerRv;
     String videoKey = "";
@@ -41,6 +43,7 @@ public class TrailerPlayerActivity extends YouTubeBaseActivity implements YouTub
     private List <Trailer> trailerList = new ArrayList <Trailer>();
     private Movie currentMovie;
     private RecyclerViewTrailerAdapter trailersAdapter;
+    private boolean isWatchLater = false;
 
 
     @Override
@@ -50,6 +53,9 @@ public class TrailerPlayerActivity extends YouTubeBaseActivity implements YouTub
         mTrailerRv = (RecyclerView) findViewById(R.id.recycler_view_trailer);
         mVoteTv = (TextView) findViewById(R.id.text_view_vote);
         mRatingTv = (TextView) findViewById(R.id.text_view_votestar);
+        mRateThisTv = (TextView) findViewById(R.id.text_view_rateings);
+        mShareTv = (TextView) findViewById(R.id.text_view_share);
+        mWatchLater = (TextView) findViewById(R.id.text_view_watchlist);
         mDescriptionTv = (TextView) findViewById(R.id.text_view_movie_description);
         mReleaseDate = (TextView) findViewById(R.id.text_view_release_date);
 
@@ -79,6 +85,37 @@ public class TrailerPlayerActivity extends YouTubeBaseActivity implements YouTub
         if (trailerList.size() > 0)
             videoKey = trailerList.get(0).getVedioLink();
 
+        mRateThisTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        mShareTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        mWatchLater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isWatchLater) {
+                    isWatchLater = false;
+                    mWatchLater.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_watchlist_focus, 0, 0);
+                    Toast.makeText(TrailerPlayerActivity.this, "Removed From Watchlist", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    isWatchLater = true;
+                    mWatchLater.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_watchlist_added, 0, 0);
+                    Toast.makeText(TrailerPlayerActivity.this, "Added To Watchlist", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
         loadTrailers();
     }
 
@@ -90,13 +127,12 @@ public class TrailerPlayerActivity extends YouTubeBaseActivity implements YouTub
             Toast.makeText(this, "Trailer is not Available yet", Toast.LENGTH_SHORT).show();
             return;
         }
-        // Start buffering
         if (!b) {
             this.player = player;
             player.cueVideo(videoKey);
         }
         player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
-        player.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
+      /*  player.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
             @Override
             public void onAdStarted() {
             }
@@ -120,7 +156,8 @@ public class TrailerPlayerActivity extends YouTubeBaseActivity implements YouTub
             @Override
             public void onVideoStarted() {
             }
-        });
+        });*/
+/*
         player.setPlaybackEventListener(new YouTubePlayer.PlaybackEventListener() {
             @Override
             public void onBuffering(boolean arg0) {
@@ -142,6 +179,7 @@ public class TrailerPlayerActivity extends YouTubeBaseActivity implements YouTub
             public void onStopped() {
             }
         });
+*/
 
 
     }
@@ -155,7 +193,7 @@ public class TrailerPlayerActivity extends YouTubeBaseActivity implements YouTub
     protected void onStart() {
         super.onStart();
         currentMovie = Application.getCurrentPlayingMovie();
-        mVoteTv.setText(""+currentMovie.getVoteCount());
+        mVoteTv.setText("" + currentMovie.getVoteCount());
         mRatingTv.setText(currentMovie.getRating() + "/10");
         mReleaseDate.setText(currentMovie.getReleaseDate());
         mDescriptionTv.setText(currentMovie.getDescription());
@@ -171,6 +209,7 @@ public class TrailerPlayerActivity extends YouTubeBaseActivity implements YouTub
     public void updateTrailer(String videoKey) {
         this.videoKey = videoKey;
         player.cueVideo(videoKey);
+        player.play();
     }
 }
 

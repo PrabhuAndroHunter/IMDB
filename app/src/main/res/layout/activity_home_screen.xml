@@ -24,6 +24,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:background="@color/colorBackgroundLight" />
+
+            <TextView
+                android:id="@+id/text_view_page_index"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:padding="10dp"
+                android:text="index" />
         </RelativeLayout>
 
 
@@ -49,7 +58,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="Now Playing"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -62,6 +71,8 @@
                         android:id="@+id/text_view_now_playing_view_all"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="onViewAllClick"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:text="View All"
@@ -104,7 +115,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="Top Rated"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -117,6 +128,8 @@
                         android:id="@+id/text_view_top_rating_view_all"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="onViewAllClick"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:text="View All"
@@ -160,7 +173,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="UpComing"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -173,6 +186,8 @@
                         android:id="@+id/text_view_up_coming_view_all"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="onViewAllClick"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:text="View All"
@@ -215,7 +230,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="Most Popular"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -228,6 +243,8 @@
                         android:id="@+id/text_view_popular_view_all"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="onViewAllClick"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:text="View All"

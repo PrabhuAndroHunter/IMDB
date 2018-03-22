@@ -26,6 +26,7 @@ public class FlashScreenActivity extends AppCompatActivity {
             public void run() {
                 // start HomeScreenActivity
                 startActivity(new Intent(FlashScreenActivity.this, HomeScreenActivity.class));
+                finish();
             }
         }, 2000);
     }

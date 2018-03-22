@@ -2,6 +2,7 @@ package com.imdb.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -11,12 +12,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.imdb.R;
-import com.imdb.adapter.ImagePagerAdapter;
+import com.imdb.adapter.TopTenMoviePosterAdapter;
 import com.imdb.adapter.RecyclerViewAdapter;
-import com.imdb.model.Data_Model;
 import com.imdb.model.Movie;
 import com.imdb.network.RequestHelper;
 import com.imdb.network.ResponseListener;
@@ -29,9 +31,10 @@ import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 public class HomeScreenActivity extends AppCompatActivity implements ResponseListener {
     private final String TAG = HomeScreenActivity.class.toString();
     private RecyclerView mNowPlayingRv, mTopRatedRv, mUpcomingRv, mPopularRv;
-    private ImagePagerAdapter topFivePosterAdapter;
+    private TextView mPageIndexTv;
+    private TopTenMoviePosterAdapter topTenPosterAdapter;
     private RecyclerViewAdapter topRatedMovieAdapter, nowPlayingMovieAdapter, upcomingMovieAdapter, popularMovieAdapter;
-    List <Movie> topRatedMovieList, nowPlayingMovieList, upcomingMovieList, popularMovieList;
+    List <Movie> topRatedMovieList, nowPlayingMovieList, upcomingMovieList, popularMovieList, topTenMoviePosters;
 
     private String[] permissions = {Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.INTERNET};
     private final int PERMISSION_CODE = 17;
@@ -39,11 +42,6 @@ public class HomeScreenActivity extends AppCompatActivity implements ResponseLis
     public static final String TOP_RATED = "topRated";
     public static final String UPCOMING = "upcoming";
     public static final String POPULAR = "popular";
-
-
-    public static final String[] TITLES = {"Hood", "Full Sleeve Shirt", "Shirt", "Jean Jacket", "Jacket"};
-    public static final Integer[] IMAGES = {R.drawable.one, R.drawable.two, R.drawable.one, R.drawable.two, R.drawable.one,};
-
     private AutoScrollViewPager viewPager;
 
     @Override
@@ -57,23 +55,23 @@ public class HomeScreenActivity extends AppCompatActivity implements ResponseLis
         mTopRatedRv = (RecyclerView) findViewById(R.id.recycler_view_top_rated);
         mUpcomingRv = (RecyclerView) findViewById(R.id.recycler_view_upcoming);
         mPopularRv = (RecyclerView) findViewById(R.id.recycler_view_popular);
+        mPageIndexTv = (TextView) findViewById(R.id.text_view_page_index);
 
-        mNowPlayingRv.setLayoutManager(new LinearLayoutManager(HomeScreenActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        mNowPlayingRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mTopRatedRv.setLayoutManager(new LinearLayoutManager(HomeScreenActivity.this, LinearLayoutManager.HORIZONTAL, false));
         mUpcomingRv.setLayoutManager(new LinearLayoutManager(HomeScreenActivity.this, LinearLayoutManager.HORIZONTAL, false));
         mPopularRv.setLayoutManager(new LinearLayoutManager(HomeScreenActivity.this, LinearLayoutManager.HORIZONTAL, false));
 
-        //        viewPager.setAdapter(new PagerAdapter(this, getImageList()).setInfiniteLoop(true));
-        topFivePosterAdapter = new ImagePagerAdapter(this);
-        viewPager.setAdapter(topFivePosterAdapter);
+        topTenPosterAdapter = new TopTenMoviePosterAdapter(this);
+        viewPager.setAdapter(topTenPosterAdapter);
         viewPager.addOnPageChangeListener(new MyOnPageChangeListener());
 
         viewPager.setInterval(2000);
         viewPager.startAutoScroll();
-        viewPager.setCycle(false);
+        viewPager.setCycle(true);
         viewPager.setBorderAnimation(true);
         viewPager.setSlideBorderMode(AutoScrollViewPager.SLIDE_BORDER_MODE_TO_PARENT);
-        viewPager.setCurrentItem(0);
+        viewPager.setCurrentItem(0, true);
         populatRecyclerView();
     }
 
@@ -128,12 +126,12 @@ public class HomeScreenActivity extends AppCompatActivity implements ResponseLis
                 break;
             case TOP_RATED:
                 topRatedMovieList = (ArrayList <Movie>) object;
-                List <Movie> topFiveMoviePosters = new ArrayList <Movie>();
-                for (int i = 0; i < 5; i++) {
-                    topFiveMoviePosters.add(topRatedMovieList.get(i));
-                    Log.d(TAG, "searchDone: " + topFiveMoviePosters.get(i));
+                topTenMoviePosters = new ArrayList <Movie>();
+                for (int i = 0; i < 10; i++) {
+                    topTenMoviePosters.add(topRatedMovieList.get(i));
+                    Log.d(TAG, "searchDone: " + topTenMoviePosters.get(i));
                 }
-                topFivePosterAdapter.setTopFivePosters(topFiveMoviePosters);
+                topTenPosterAdapter.setTopTenPosters(topTenMoviePosters);
                 Log.d(TAG, "searchDone: topRatedMovieList " + topRatedMovieList.size());
                 topRatedMovieAdapter.refreshUI(topRatedMovieList);
                 break;
@@ -168,12 +166,12 @@ public class HomeScreenActivity extends AppCompatActivity implements ResponseLis
 
         @Override
         public void onPageSelected(int position) {
-//            indexText.setText(new StringBuilder().append((position) % mResources.length + 1).append("/")
-//                    .append(mResources.length));
+            mPageIndexTv.setText(new StringBuilder().append((position) % topTenMoviePosters.size() + 1).append("/")
+                    .append(topTenMoviePosters.size()));
             Log.d(TAG, "onPageSelected: " + position);
-            if (position == 5)
+            /*if (position == 9)
                 viewPager.setCurrentItem(0);
-            viewPager.startAutoScroll();
+            viewPager.startAutoScroll();*/
         }
 
         @Override
@@ -199,16 +197,38 @@ public class HomeScreenActivity extends AppCompatActivity implements ResponseLis
         viewPager.startAutoScroll();
     }
 
-    // populate the list view by adding data to arraylist
     private void populatRecyclerView() {
         topRatedMovieAdapter = new RecyclerViewAdapter(this, RecyclerViewAdapter.TOP_RATED_MOVIE);
         nowPlayingMovieAdapter = new RecyclerViewAdapter(this, RecyclerViewAdapter.NOW_PLAYING);
         upcomingMovieAdapter = new RecyclerViewAdapter(this, RecyclerViewAdapter.UPCOMING_MOVIE);
         popularMovieAdapter = new RecyclerViewAdapter(this, RecyclerViewAdapter.POPULAR_MOVIE);
 
-        mNowPlayingRv.setAdapter(nowPlayingMovieAdapter);// set adapter on recyclerview
+        mNowPlayingRv.setAdapter(nowPlayingMovieAdapter);
         mTopRatedRv.setAdapter(topRatedMovieAdapter);
         mUpcomingRv.setAdapter(upcomingMovieAdapter);
         mPopularRv.setAdapter(popularMovieAdapter);
+    }
+
+    public void onViewAllClick(View view) {
+        int viewId = view.getId();
+        Intent intent = new Intent(this, ViewAllMovieActivity.class);
+        switch (viewId) {
+            case R.id.text_view_now_playing_view_all:
+                intent.putExtra("TAG", "Now Playing");
+                startActivity(intent);
+                break;
+            case R.id.text_view_top_rating_view_all:
+                intent.putExtra("TAG", "Top Rating");
+                startActivity(intent);
+                break;
+            case R.id.text_view_up_coming_view_all:
+                intent.putExtra("TAG", "UpComing");
+                startActivity(intent);
+                break;
+            case R.id.text_view_popular_view_all:
+                intent.putExtra("TAG", "Most Populer");
+                startActivity(intent);
+                break;
+        }
     }
 }
