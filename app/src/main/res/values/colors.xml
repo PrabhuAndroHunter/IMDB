@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#686767</color>
+    <color name="colorPrimary">#232222</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF4081</color>
 
     <color name="colorBackground">#000000</color>
+    <color name="colorBackgroundWhite">#FFFFFF</color>
     <color name="colorBackgroundLight">#494944</color>
     <color name="colorTitleText">#ffffff</color>
+    <color name="colorTitleTextBlack">#000000</color>
     <color name="colorHintText">#a044fc</color>
+    <color name="colorHintTextTitle">#01d4d0</color>
     <color name="colorTransparent">#33000000</color>
     <color name="colorAllPosterBackground">#737272</color>
 

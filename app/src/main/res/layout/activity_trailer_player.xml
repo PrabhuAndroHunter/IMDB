@@ -1,23 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.imdb.activity.TrailerPlayerActivity">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-    <com.google.android.youtube.player.YouTubePlayerView
-        android:id="@+id/youtube_playerview"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Prabhu"
-        android:textSize="20sp"
-        android:textColor="@color/colorBackground"
-        android:layout_below="@+id/youtube_playerview"/>
+        android:layout_height="match_parent"
+        android:background="@color/colorBackgroundWhite"
+        tools:context="com.imdb.activity.TrailerPlayerActivity">
+
+        <com.google.android.youtube.player.YouTubePlayerView
+            android:id="@+id/youtube_playerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
 
+        <RelativeLayout
+            android:id="@+id/layout_vote_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/youtube_playerview"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp">
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/text_view_vote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="30dp"
+                android:drawablePadding="2dp"
+                android:drawableTop="@drawable/ic_thumb"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center"
+                android:text="71"
+                android:textColor="@color/colorTitleTextBlack"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/text_view_votestar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/text_view_vote"
+                android:drawablePadding="2dp"
+                android:layout_marginRight="30dp"
+                android:drawableTop="@drawable/ic_thumb_star"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center"
+                android:text="6.9"
+                android:textColor="@color/colorTitleTextBlack"
+                android:textSize="12sp" />
+
+
+            <TextView
+                android:id="@+id/text_view_rateings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/text_view_votestar"
+                android:layout_marginRight="30dp"
+                android:drawableTop="@drawable/ic_rating"
+                android:gravity="center"
+                android:text="Rate This"
+                android:textColor="@color/colorTitleTextBlack"
+                android:textSize="12sp" />
+
+
+            <TextView
+                android:id="@+id/text_view_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/text_view_rateings"
+                android:drawablePadding="2dp"
+                android:layout_marginRight="30dp"
+                android:drawableTop="@drawable/ic_share"
+                android:gravity="center"
+                android:text="Share"
+                android:textColor="@color/colorTitleTextBlack"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/text_view_watchlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/text_view_share"
+                android:layout_marginRight="20dp"
+                android:drawableTop="@drawable/ic_watchlist_focus"
+                android:gravity="center"
+                android:text="Watch Later"
+                android:maxLines="2"
+                android:textColor="@color/colorTitleTextBlack"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/text_view_videos_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Videos"
+            android:layout_below="@+id/layout_vote_data"
+            android:textSize="18sp"
+            android:textColor="@color/colorTitleTextBlack"
+            android:textStyle="bold" />
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_trailer"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/text_view_videos_title"
+            android:scrollbars="none"
+            tools:listitem="@layout/item_trailer" />
+
+        <TextView
+            android:id="@+id/text_view_release"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recycler_view_trailer"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Release Date :"
+            android:textAlignment="gravity"
+            android:textColor="@color/colorTitleTextBlack"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_view_release_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@+id/text_view_release"
+            android:layout_below="@+id/recycler_view_trailer"
+            android:text="Release Date :"
+            android:textColor="@color/colorTitleTextBlack"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/text_view_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_view_release"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Description :"
+            android:textAlignment="gravity"
+            android:textColor="@color/colorTitleTextBlack"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_view_movie_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_view_description"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="20dp"
+            android:text="Movie details"
+            android:textColor="@color/colorTitleTextBlack"
+            android:textSize="12sp" />
+    </RelativeLayout>
+</ScrollView>

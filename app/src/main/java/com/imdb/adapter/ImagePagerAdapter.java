@@ -84,7 +84,6 @@ public class ImagePagerAdapter extends PagerAdapter {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: " + curMovie.getTitle());
                 Application.setCurrentPlayingMovie(curMovie);
-//                parentActivity.startActivity(new Intent(parentActivity, TrailerPlayerActivity.class));
                 String[] s = new String[5];
 
                 s[0] = curMovie.getTitle();
@@ -94,7 +93,6 @@ public class ImagePagerAdapter extends PagerAdapter {
                 s[3] = curMovie.getMovieId();
                 s[4] = curMovie.getReleaseDate();
                 new FetchNowPlayingMoviesData("TRAILER").execute(s);
-
             }
         });
 

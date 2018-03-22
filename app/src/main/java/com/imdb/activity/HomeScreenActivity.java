@@ -201,10 +201,6 @@ public class HomeScreenActivity extends AppCompatActivity implements ResponseLis
 
     // populate the list view by adding data to arraylist
     private void populatRecyclerView() {
-        ArrayList <Data_Model> arrayList = new ArrayList <>();
-        for (int i = 0; i < TITLES.length; i++) {
-            arrayList.add(new Data_Model(TITLES[i], IMAGES[i]));
-        }
         topRatedMovieAdapter = new RecyclerViewAdapter(this, RecyclerViewAdapter.TOP_RATED_MOVIE);
         nowPlayingMovieAdapter = new RecyclerViewAdapter(this, RecyclerViewAdapter.NOW_PLAYING);
         upcomingMovieAdapter = new RecyclerViewAdapter(this, RecyclerViewAdapter.UPCOMING_MOVIE);

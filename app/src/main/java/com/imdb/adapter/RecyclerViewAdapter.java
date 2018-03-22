@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by SONU on 25/09/15.
+ * Created by prabhu on 20/03/18.
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapter.MyViewAdapter> {// Recyclerview will extend to
     private final String TAG = RecyclerViewAdapter.class.toString();

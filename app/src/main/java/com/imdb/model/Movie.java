@@ -20,6 +20,7 @@ public class Movie {
     private String rating;
     private String banner;
     private String trailer;
+    private int voteCount;
 
 
     public Movie(int id, int vote_count, String name) {
@@ -29,7 +30,7 @@ public class Movie {
     }
 
     // This Constructor is used in NowPlaying
-    public Movie(String title, String movieId, String description, String lang, String poster, String releaseDate, String rating, String banner) {
+    public Movie(String title, String movieId, String description, String lang, String poster, String releaseDate, String rating, int voteCount, String banner) {
         this.title = title;
         this.movieId = movieId;
         this.description = description;
@@ -37,6 +38,7 @@ public class Movie {
         this.poster = poster;
         this.releaseDate = releaseDate;
         this.rating = rating;
+        this.voteCount = voteCount;
         this.banner = banner;
         this.trailer = "http://api.themoviedb.org/3/movie/" + movieId + "/videos?api_key=8496be0b2149805afa458ab8ec27560c";
         Log.d(TAG, "Movie: "+trailer);
@@ -68,6 +70,10 @@ public class Movie {
 
     public String getRating() {
         return rating;
+    }
+
+    public int getVoteCount() {
+        return voteCount;
     }
 
     public String getBanner() {

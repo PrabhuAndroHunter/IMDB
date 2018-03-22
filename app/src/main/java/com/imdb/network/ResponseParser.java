@@ -51,9 +51,10 @@ public class ResponseParser {
                 String language = jsonArray.getJSONObject(i).getString("original_language");
                 String movieId = jsonArray.getJSONObject(i).getString("id");
                 String rate = jsonArray.getJSONObject(i).getString("vote_average");
+                int voteCount = jsonArray.getJSONObject(i).getInt("vote_count");
                 String banner = jsonArray.getJSONObject(i).getString("backdrop_path");
                 // Log.i("Async Task", posterPath);
-                Movie m = new Movie(title.trim(), movieId.trim(), releaseDate.trim(), language.trim(), "http://image.tmdb.org/t/p/w500" + posterPath, description.trim(), rate.trim(), "http://image.tmdb.org/t/p/w500" + banner);
+                Movie m = new Movie(title.trim(), movieId.trim(), description.trim(), language.trim(), "http://image.tmdb.org/t/p/w500" + posterPath, releaseDate.trim(), rate.trim(), voteCount, "http://image.tmdb.org/t/p/w500" + banner);
                 nowPlayingMoviesList.add(m);
             }
             listener.searchDone(nowPlayingMoviesList, HomeScreenActivity.NOW_PLAYING);
@@ -76,9 +77,10 @@ public class ResponseParser {
                 String language = jsonArray.getJSONObject(i).getString("original_language");
                 String movieId = jsonArray.getJSONObject(i).getString("id");
                 String rate = jsonArray.getJSONObject(i).getString("vote_average");
+                int voteCount = jsonArray.getJSONObject(i).getInt("vote_count");
                 String banner = jsonArray.getJSONObject(i).getString("backdrop_path");
                 // Log.i("Async Task", posterPath);
-                Movie m = new Movie(title.trim(), movieId.trim(), releaseDate.trim(), language.trim(), "http://image.tmdb.org/t/p/w500" + posterPath, description.trim(), rate.trim(), "http://image.tmdb.org/t/p/w500" + banner);
+                Movie m = new Movie(title.trim(), movieId.trim(), description.trim(), language.trim(), "http://image.tmdb.org/t/p/w500" + posterPath, releaseDate.trim(), rate.trim(), voteCount, "http://image.tmdb.org/t/p/w500" + banner);
                 topRatedMoviesList.add(m);
             }
             listener.searchDone(topRatedMoviesList, HomeScreenActivity.TOP_RATED);
@@ -101,8 +103,9 @@ public class ResponseParser {
                 String language = jsonArray.getJSONObject(i).getString("original_language");
                 String movieId = jsonArray.getJSONObject(i).getString("id");
                 String rate = jsonArray.getJSONObject(i).getString("vote_average");
+                int voteCount = jsonArray.getJSONObject(i).getInt("vote_count");
                 String banner = jsonArray.getJSONObject(i).getString("backdrop_path");
-                Movie m = new Movie(title.trim(), movieId.trim(), releaseDate.trim(), language.trim(), "http://image.tmdb.org/t/p/w500" + posterPath, description.trim(), rate.trim(), "http://image.tmdb.org/t/p/w500" + banner);
+                Movie m = new Movie(title.trim(), movieId.trim(), description.trim(), language.trim(), "http://image.tmdb.org/t/p/w500" + posterPath, releaseDate.trim(), rate.trim(), voteCount, "http://image.tmdb.org/t/p/w500" + banner);
                 upcomingMoviesList.add(m);
             }
             listener.searchDone(upcomingMoviesList, HomeScreenActivity.UPCOMING);
@@ -125,8 +128,9 @@ public class ResponseParser {
                 String language = jsonArray.getJSONObject(i).getString("original_language");
                 String movieId = jsonArray.getJSONObject(i).getString("id");
                 String rate = jsonArray.getJSONObject(i).getString("vote_average");
+                int voteCount = jsonArray.getJSONObject(i).getInt("vote_count");
                 String banner = jsonArray.getJSONObject(i).getString("backdrop_path");
-                Movie m = new Movie(title.trim(), movieId.trim(), releaseDate.trim(), language.trim(), "http://image.tmdb.org/t/p/w500" + posterPath, description.trim(), rate.trim(), "http://image.tmdb.org/t/p/w500" + banner);
+                Movie m = new Movie(title.trim(), movieId.trim(), description.trim(), language.trim(), "http://image.tmdb.org/t/p/w500" + posterPath, releaseDate.trim(), rate.trim(), voteCount, "http://image.tmdb.org/t/p/w500" + banner);
                 popularMoviesList.add(m);
             }
             listener.searchDone(popularMoviesList, HomeScreenActivity.POPULAR);
