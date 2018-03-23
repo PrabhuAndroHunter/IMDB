@@ -3,9 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -13,11 +12,12 @@
         android:background="@color/colorBackgroundWhite"
         tools:context="com.imdb.activity.TrailerPlayerActivity">
 
-        <com.google.android.youtube.player.YouTubePlayerView
+        <fragment
             android:id="@+id/youtube_playerview"
+            android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="wrap_content"
+            android:elevation="4dp" />
 
         <RelativeLayout
             android:id="@+id/layout_vote_data"
@@ -45,9 +45,9 @@
                 android:id="@+id/text_view_votestar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
                 android:layout_toRightOf="@id/text_view_vote"
                 android:drawablePadding="2dp"
-                android:layout_marginRight="30dp"
                 android:drawableTop="@drawable/ic_thumb_star"
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center"
@@ -60,8 +60,8 @@
                 android:id="@+id/text_view_rateings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/text_view_votestar"
                 android:layout_marginRight="30dp"
+                android:layout_toRightOf="@id/text_view_votestar"
                 android:drawableTop="@drawable/ic_rating"
                 android:gravity="center"
                 android:text="Rate This"
@@ -73,9 +73,9 @@
                 android:id="@+id/text_view_share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
                 android:layout_toRightOf="@id/text_view_rateings"
                 android:drawablePadding="2dp"
-                android:layout_marginRight="30dp"
                 android:drawableTop="@drawable/ic_share"
                 android:gravity="center"
                 android:text="Share"
@@ -86,12 +86,12 @@
                 android:id="@+id/text_view_watchlist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/text_view_share"
                 android:layout_marginRight="20dp"
+                android:layout_toRightOf="@id/text_view_share"
                 android:drawableTop="@drawable/ic_watchlist_focus"
                 android:gravity="center"
-                android:text="Watch Later"
                 android:maxLines="2"
+                android:text="Watch Later"
                 android:textColor="@color/colorTitleTextBlack"
                 android:textSize="12sp" />
 
@@ -101,12 +101,12 @@
             android:id="@+id/text_view_videos_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_vote_data"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="Videos"
-            android:layout_below="@+id/layout_vote_data"
-            android:textSize="18sp"
             android:textColor="@color/colorTitleTextBlack"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
 
@@ -136,10 +136,10 @@
             android:id="@+id/text_view_release_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/recycler_view_trailer"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_toRightOf="@+id/text_view_release"
-            android:layout_below="@+id/recycler_view_trailer"
             android:text="Release Date :"
             android:textColor="@color/colorTitleTextBlack"
             android:textSize="14sp" />
@@ -162,9 +162,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/text_view_description"
             android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="20dp"
             android:text="Movie details"
             android:textColor="@color/colorTitleTextBlack"
             android:textSize="12sp" />

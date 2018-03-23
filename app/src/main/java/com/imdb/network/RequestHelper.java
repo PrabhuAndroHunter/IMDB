@@ -146,4 +146,55 @@ public class RequestHelper {
         });
         Application.getInstance().addToRequestQueue(getPopularMoviesReq);
     }
+
+
+    public static void getMovieDetails(String movieId, final ResponseListener listner) {
+        final String URL = "http://api.themoviedb.org/3/movie/" + movieId + "?api_key=8496be0b2149805afa458ab8ec27560c";
+        Log.d(TAG, "get Movie details: " + URL);
+        JsonObjectRequest getMovieDetailsReq = new JsonObjectRequest(Request.Method.GET,
+                URL, null, new Response.Listener <JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                // Call ResponseParser to parse the response
+                Log.d(TAG, "onResponse: ");
+                 ResponseParser.parseMovieDetails(response, listner);
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "onErrorResponse: ");
+                listner.searchFail(error.getMessage(), HomeScreenActivity.NON);
+            }
+        });
+        Application.getInstance().addToRequestQueue(getMovieDetailsReq);
+    }
+
+    public static void getMovieArtistDetails(String movieId, final ResponseListener listner) {
+        final String URL = "http://api.themoviedb.org/3/movie/" + movieId + "/credits?api_key=8496be0b2149805afa458ab8ec27560c";
+        Log.d(TAG, "get Movie Artist details: " + URL);
+        JsonObjectRequest getMovieDetailsReq = new JsonObjectRequest(Request.Method.GET,
+                URL, null, new Response.Listener <JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                // Call ResponseParser to parse the response
+                Log.d(TAG, "onResponse: ");
+                // ResponseParser.parseMovieDetails(response, listner);
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "onErrorResponse: ");
+                listner.searchFail(error.getMessage(), HomeScreenActivity.NON);
+            }
+        });
+        Application.getInstance().addToRequestQueue(getMovieDetailsReq);
+    }
 }

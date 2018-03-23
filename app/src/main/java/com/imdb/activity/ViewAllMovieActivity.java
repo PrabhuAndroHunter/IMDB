@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.imdb.R;
 import com.imdb.adapter.ViewAllMovieAdapter;
@@ -29,6 +30,8 @@ public class ViewAllMovieActivity extends AppCompatActivity implements ResponseL
         setContentView(R.layout.activity_view_all_movie);
         tag = getIntent().getStringExtra("TAG");
         Log.d(TAG, "onCreate: tag : " + tag);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(tag + "Movies");
         mviewAllMovieRv = (RecyclerView) findViewById(R.id.view_all_movie);
         mviewAllMovieRv.setLayoutManager(new LinearLayoutManager(this));
         viewAllMovieAdapter = new ViewAllMovieAdapter(this, RecyclerViewAdapter.TOP_RATED_MOVIE);
@@ -68,5 +71,18 @@ public class ViewAllMovieActivity extends AppCompatActivity implements ResponseL
     @Override
     public void searchFail(String error, String tag) {
         Log.d(TAG, "searchFail: nowPlayingMovieList " + error);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.no_change, R.anim.slide_out_right);
     }
 }

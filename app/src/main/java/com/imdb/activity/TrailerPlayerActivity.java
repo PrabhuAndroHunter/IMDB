@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +16,7 @@ import com.google.android.youtube.player.YouTubeApiServiceUtil;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.google.android.youtube.player.YouTubePlayerView;
 import com.imdb.R;
 import com.imdb.adapter.RecyclerViewAdapter;
@@ -30,10 +33,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TrailerPlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
+public class TrailerPlayerActivity extends AppCompatActivity implements YouTubePlayer.OnInitializedListener {
 
     private final String TAG = TrailerPlayerActivity.class.toString();
-    YouTubePlayerView playerView;
     private TextView mVoteTv, mRatingTv, mRateThisTv, mShareTv, mWatchLater, mDescriptionTv, mReleaseDate;
     YouTubePlayer player;
     private RecyclerView mTrailerRv;
@@ -58,21 +60,21 @@ public class TrailerPlayerActivity extends YouTubeBaseActivity implements YouTub
         mWatchLater = (TextView) findViewById(R.id.text_view_watchlist);
         mDescriptionTv = (TextView) findViewById(R.id.text_view_movie_description);
         mReleaseDate = (TextView) findViewById(R.id.text_view_release_date);
-
         mTrailerRv.setLayoutManager(new LinearLayoutManager(TrailerPlayerActivity.this, LinearLayoutManager.HORIZONTAL, false));
 
-        Log.d(TAG, "onCreate: ");
         bundle = getIntent().getBundleExtra("movie");
         videoList = (ArrayList <HashMap <String, String>>) getIntent().getSerializableExtra("videoIdList");
-        Log.d(TAG, "onCreate: videoList" + videoList.size());
         final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(this);
         if (result != YouTubeInitializationResult.SUCCESS) {
             //If there are any issues we can show an error dialog.
             result.getErrorDialog(this, 0).show();
             this.finish();
         }
-        playerView = (YouTubePlayerView) findViewById(R.id.youtube_playerview);
-        playerView.initialize(Url.YOUTUBE_API_KEY, TrailerPlayerActivity.this);
+        YouTubePlayerSupportFragment frag =
+                (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube_playerview);
+        frag.initialize(Url.YOUTUBE_API_KEY, this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("IMDB Player");
 
         for (HashMap <String, String> map : videoList) {
             for (Map.Entry <String, String> mapEntry : map.entrySet()) {
@@ -117,6 +119,18 @@ public class TrailerPlayerActivity extends YouTubeBaseActivity implements YouTub
         });
 
         loadTrailers();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.no_change, R.anim.slide_out_right);
     }
 
     @Override

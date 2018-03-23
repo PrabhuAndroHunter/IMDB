@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.imdb.R;
+import com.imdb.activity.MovieDetailsActivity;
 import com.imdb.activity.TrailerPlayerActivity;
 import com.imdb.activity.ViewAllMovieActivity;
 import com.imdb.application.Application;
@@ -71,7 +72,15 @@ public class ViewAllMovieAdapter extends RecyclerView.Adapter <ViewAllMovieAdapt
                 .placeholder(R.drawable.ic_imdb_logo)
                 .into(holder.mThumbImv);
         holder.mReleaseDateTv.setText(curMovie.getReleaseDate());
-        holder.mVoteTv.setText(""+curMovie.getVoteCount());
+        holder.mVoteTv.setText("" + curMovie.getVoteCount());
+
+        holder.mSeeMoreTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Application.setCurrentPlayingMovie(curMovie);
+                parentActivity.startActivity(new Intent(parentActivity, MovieDetailsActivity.class));
+            }
+        });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +106,7 @@ public class ViewAllMovieAdapter extends RecyclerView.Adapter <ViewAllMovieAdapt
 
 
     class MyViewAdapter extends RecyclerView.ViewHolder {
-        private TextView mTitleTv, mReleaseDateTv, mVoteTv;
+        private TextView mTitleTv, mReleaseDateTv, mVoteTv, mSeeMoreTv;
         private ImageView mThumbImv;
 
         public MyViewAdapter(View itemView) {
@@ -106,6 +115,7 @@ public class ViewAllMovieAdapter extends RecyclerView.Adapter <ViewAllMovieAdapt
             mThumbImv = (ImageView) itemView.findViewById(R.id.image);
             mReleaseDateTv = (TextView) itemView.findViewById(R.id.text_view_release_date);
             mVoteTv = (TextView) itemView.findViewById(R.id.text_view_vote);
+            mSeeMoreTv = (TextView) itemView.findViewById(R.id.text_view_see_more);
         }
     }
 

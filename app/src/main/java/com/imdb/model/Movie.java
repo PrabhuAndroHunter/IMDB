@@ -23,6 +23,7 @@ public class Movie {
     private int voteCount;
 
 
+
     public Movie(int id, int vote_count, String name) {
         this.id = id;
         this.vote_count = vote_count;

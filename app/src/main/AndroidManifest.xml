@@ -23,10 +23,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.HomeScreenActivity" />
+        <activity android:name=".activity.TrailerPlayerActivity" />
         <activity
-            android:name=".activity.TrailerPlayerActivity"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".activity.ViewAllMovieActivity"></activity>
+            android:name=".activity.ViewAllMovieActivity"
+            android:parentActivityName=".activity.HomeScreenActivity" />
+        <activity android:name=".activity.MovieDetailsActivity"
+            android:theme="@style/FlashScreen"></activity>
     </application>
 
 </manifest>

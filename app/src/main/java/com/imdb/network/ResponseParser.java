@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.imdb.activity.HomeScreenActivity;
 import com.imdb.model.Movie;
+import com.imdb.model.MovieDetails;
+import com.imdb.model.ProductionCompanies;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -138,6 +140,42 @@ public class ResponseParser {
         } catch (Exception e) {
             Log.e(TAG, "parse Popular MovieInfo: " + e.getMessage());
             listener.searchFail(e.getMessage(), HomeScreenActivity.POPULAR);
+        }
+    }
+
+    protected static void parseMovieDetails(JSONObject resp, ResponseListener listener) {
+        try {
+            String backdrop_path = resp.getString("backdrop_path");
+            boolean adult = resp.getBoolean("adult");
+            int budget = resp.getInt("budget");
+            long budgetakfn = resp.getLong("budget");
+            Log.d(TAG, "parseMovieDetails: "+budgetakfn);
+            Log.d(TAG, "parseMovieDetails: budget "+budget);
+            int revenue = resp.getInt("revenue");
+            String website = resp.getString("homepage");
+            String language = resp.getString("original_language");
+
+            JSONArray genres = resp.getJSONArray("genres");
+            List <String> genresList = new ArrayList <String>();
+            for (int i = 0; i < genres.length(); i++) {
+                genresList.add(genres.getJSONObject(i).getString("name"));
+            }
+
+            JSONArray production_companies = resp.getJSONArray("production_companies");
+            List <ProductionCompanies> productionCompaniesList = new ArrayList <ProductionCompanies>();
+            for (int i = 0; i < production_companies.length(); i++) {
+                int id = production_companies.getJSONObject(i).getInt("id");
+                String name = production_companies.getJSONObject(i).getString("name");
+                String logo = production_companies.getJSONObject(i).getString("logo_path");
+                String country = production_companies.getJSONObject(i).getString("origin_country");
+                productionCompaniesList.add(new ProductionCompanies(id, name, logo, country));
+            }
+
+            MovieDetails movieDetails = new MovieDetails(backdrop_path, adult, budget, revenue, website, language, genresList, productionCompaniesList);
+            listener.searchDone(movieDetails, HomeScreenActivity.NON);
+        } catch (Exception e) {
+            Log.e(TAG, "parse Popular MovieInfo: " + e.getMessage());
+            listener.searchFail(e.getMessage(), HomeScreenActivity.NON);
         }
     }
 }

@@ -6,12 +6,16 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,17 +36,19 @@ public class HomeScreenActivity extends AppCompatActivity implements ResponseLis
     private final String TAG = HomeScreenActivity.class.toString();
     private RecyclerView mNowPlayingRv, mTopRatedRv, mUpcomingRv, mPopularRv;
     private TextView mPageIndexTv;
+    private AutoScrollViewPager viewPager;
     private TopTenMoviePosterAdapter topTenPosterAdapter;
     private RecyclerViewAdapter topRatedMovieAdapter, nowPlayingMovieAdapter, upcomingMovieAdapter, popularMovieAdapter;
-    List <Movie> topRatedMovieList, nowPlayingMovieList, upcomingMovieList, popularMovieList, topTenMoviePosters;
 
+    List <Movie> topRatedMovieList, nowPlayingMovieList, upcomingMovieList, popularMovieList, topTenMoviePosters;
     private String[] permissions = {Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.INTERNET};
     private final int PERMISSION_CODE = 17;
     public static final String NOW_PLAYING = "now_playing";
     public static final String TOP_RATED = "topRated";
     public static final String UPCOMING = "upcoming";
     public static final String POPULAR = "popular";
-    private AutoScrollViewPager viewPager;
+    public static final String NON = "non";
+    private long exitTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

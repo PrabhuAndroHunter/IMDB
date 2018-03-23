@@ -15,6 +15,5 @@ public class Url {
     public final static String MOVIE_TOP_RATED = "http://api.themoviedb.org/3/movie/top_rated?api_key=8496be0b2149805afa458ab8ec27560c";
     public final static String MOVIE_UPCOMING = "http://api.themoviedb.org/3/movie/upcoming?api_key=8496be0b2149805afa458ab8ec27560c";
     public final static String MOVIE_POPULAR = "http://api.themoviedb.org/3/movie/popular?api_key=8496be0b2149805afa458ab8ec27560c";
-
 }
 
