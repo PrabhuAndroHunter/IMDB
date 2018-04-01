@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">IMDb</string>
+    <string name="app_name">IMDB</string>
+    <string name="Rs_words">  \u20A8</string>
 </resources>

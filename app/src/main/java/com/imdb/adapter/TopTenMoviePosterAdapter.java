@@ -83,16 +83,22 @@ public class TopTenMoviePosterAdapter extends PagerAdapter {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: " + curMovie.getTitle());
-                Application.setCurrentPlayingMovie(curMovie);
-                String[] s = new String[5];
 
-                s[0] = curMovie.getTitle();
-                String urlstring = "http://api.themoviedb.org/3/movie/" + curMovie.getMovieId() + "/videos?api_key=8496be0b2149805afa458ab8ec27560c";
-                s[1] = urlstring.replace(" ", "%20");
-                s[2] = curMovie.getRating();
-                s[3] = curMovie.getMovieId();
-                s[4] = curMovie.getReleaseDate();
-                new FetchNowPlayingMoviesData("TRAILER").execute(s);
+                if (Application.isNetWorkConnected){
+                    Application.setCurrentPlayingMovie(curMovie);
+                    String[] s = new String[5];
+
+                    s[0] = curMovie.getTitle();
+                    String urlstring = "http://api.themoviedb.org/3/movie/" + curMovie.getMovieId() + "/videos?api_key=8496be0b2149805afa458ab8ec27560c";
+                    s[1] = urlstring.replace(" ", "%20");
+                    s[2] = curMovie.getRating();
+                    s[3] = curMovie.getMovieId();
+                    s[4] = curMovie.getReleaseDate();
+                    new FetchNowPlayingMoviesData("TRAILER").execute(s);
+                }
+                else {
+                    parentActivity.showNoNetworkToast();
+                }
             }
         });
 
@@ -112,14 +118,12 @@ public class TopTenMoviePosterAdapter extends PagerAdapter {
 
     private class FetchNowPlayingMoviesData extends AsyncTask <String, Void, Void> {
         String tag;
-        ProgressDialog progressDialog = new ProgressDialog(mContext);
         String content;
         String error;
         String title = "";
         String rating = "";
         String movieId = "";
         String year = "";
-        Movie m;
         ArrayList <Movie> movieArrayList = new ArrayList <Movie>();
         ListAdapter mAdapter;
 
@@ -130,16 +134,13 @@ public class TopTenMoviePosterAdapter extends PagerAdapter {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog.setMessage("Please Wait....");
-            progressDialog.show();
+            parentActivity.showLoader();
         }
 
         @Override
         protected Void doInBackground(String... s) {
             BufferedReader br = null;
             URL url = null;
-
-
             try {
                 if (tag.equals("TRAILER")) {
                     url = new URL(s[1]);
@@ -170,6 +171,7 @@ public class TopTenMoviePosterAdapter extends PagerAdapter {
                 e.printStackTrace();
             } finally {
                 try {
+                    if (br != null)
                     br.close();
                 } catch (IOException e) {
                     error = e.getMessage();
@@ -182,7 +184,7 @@ public class TopTenMoviePosterAdapter extends PagerAdapter {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            progressDialog.dismiss();
+            parentActivity.hideLoader();
             if (error != null) {
                 Toast.makeText(mContext, error, Toast.LENGTH_LONG).show();
             } else {

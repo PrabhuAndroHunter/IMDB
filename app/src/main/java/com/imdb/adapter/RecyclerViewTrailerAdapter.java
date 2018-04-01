@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.imdb.R;
 import com.imdb.activity.TrailerPlayerActivity;
+import com.imdb.application.Application;
 import com.imdb.model.Movie;
 import com.imdb.model.Trailer;
 
@@ -37,7 +38,7 @@ public class RecyclerViewTrailerAdapter extends RecyclerView.Adapter <RecyclerVi
 
     @Override
     public MyViewAdapter onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_trailer, parent, false);
         return new MyViewAdapter(view);
     }
 
@@ -46,16 +47,19 @@ public class RecyclerViewTrailerAdapter extends RecyclerView.Adapter <RecyclerVi
         final Trailer currentTransaction = trailerList.get(position);
         holder.mTitleTv.setText(currentTransaction.getName());
         Glide.with(context)
-                .load("http://img.youtube.com/vi/"+currentTransaction.getVedioLink()+"/0.jpg")
+                .load("http://img.youtube.com/vi/" + currentTransaction.getVedioLink() + "/0.jpg")
                 .placeholder(R.drawable.ic_imdb_logo)
                 .crossFade()
                 .into(holder.mThumbImv);
-        Log.d(TAG, "onBindViewHolder: "+"http://img.youtube.com/vi/"+currentTransaction.getVedioLink()+"/0.jpg");
+        Log.d(TAG, "onBindViewHolder: " + "http://img.youtube.com/vi/" + currentTransaction.getVedioLink() + "/0.jpg");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: vedio link " + currentTransaction.getVedioLink());
-                parentActivity.updateTrailer(currentTransaction.getVedioLink());
+                if (Application.isNetWorkConnected)
+                    parentActivity.updateTrailer(currentTransaction.getVedioLink());
+                else
+                    parentActivity.showNoNetworkToast();
             }
         });
     }

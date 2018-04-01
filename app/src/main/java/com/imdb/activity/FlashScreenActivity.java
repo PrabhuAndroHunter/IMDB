@@ -2,12 +2,12 @@ package com.imdb.activity;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.imdb.R;
+import com.imdb.application.BaseActivity;
 
-public class FlashScreenActivity extends AppCompatActivity {
+public class FlashScreenActivity extends BaseActivity {
     private final String TAG = FlashScreenActivity.class.toString();
 
     @Override

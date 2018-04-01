@@ -22,8 +22,7 @@
             <ImageView
                 android:id="@+id/image"
                 android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_height="165dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_imdb_logo" />
 
@@ -86,6 +85,7 @@
                 android:layout_toRightOf="@id/image"
                 android:drawableLeft="@drawable/ic_see_more"
                 android:drawablePadding="10dp"
+                android:drawingCacheQuality="high"
                 android:gravity="start"
                 android:maxLines="1"
                 android:paddingBottom="8dp"

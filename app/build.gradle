@@ -38,4 +38,8 @@ dependencies {
     }
     compile files('libs/YouTubeAndroidPlayerApi.jar')
 
+    compile 'com.wang.avi:library:1.0.3'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.hedgehog.ratingbar:app:1.1.2'
+
 }

@@ -4,18 +4,15 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +20,9 @@ import android.widget.Toast;
 import com.imdb.R;
 import com.imdb.adapter.TopTenMoviePosterAdapter;
 import com.imdb.adapter.RecyclerViewAdapter;
+import com.imdb.application.BaseActivity;
 import com.imdb.model.Movie;
+import com.imdb.network.NetworkStateListener;
 import com.imdb.network.RequestHelper;
 import com.imdb.network.ResponseListener;
 
@@ -32,7 +31,7 @@ import java.util.List;
 
 import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 
-public class HomeScreenActivity extends AppCompatActivity implements ResponseListener {
+public class HomeScreenActivity extends BaseActivity implements ResponseListener, NetworkStateListener {
     private final String TAG = HomeScreenActivity.class.toString();
     private RecyclerView mNowPlayingRv, mTopRatedRv, mUpcomingRv, mPopularRv;
     private TextView mPageIndexTv;
@@ -50,6 +49,8 @@ public class HomeScreenActivity extends AppCompatActivity implements ResponseLis
     public static final String NON = "non";
     private long exitTime;
 
+    Snackbar snackbar = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +63,11 @@ public class HomeScreenActivity extends AppCompatActivity implements ResponseLis
         mUpcomingRv = (RecyclerView) findViewById(R.id.recycler_view_upcoming);
         mPopularRv = (RecyclerView) findViewById(R.id.recycler_view_popular);
         mPageIndexTv = (TextView) findViewById(R.id.text_view_page_index);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
         mNowPlayingRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mTopRatedRv.setLayoutManager(new LinearLayoutManager(HomeScreenActivity.this, LinearLayoutManager.HORIZONTAL, false));
         mUpcomingRv.setLayoutManager(new LinearLayoutManager(HomeScreenActivity.this, LinearLayoutManager.HORIZONTAL, false));
@@ -76,26 +81,53 @@ public class HomeScreenActivity extends AppCompatActivity implements ResponseLis
         viewPager.startAutoScroll();
         viewPager.setCycle(true);
         viewPager.setBorderAnimation(true);
+        viewPager.setStopScrollWhenTouch(true);
         viewPager.setSlideBorderMode(AutoScrollViewPager.SLIDE_BORDER_MODE_TO_PARENT);
         viewPager.setCurrentItem(0, true);
         populatRecyclerView();
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
         // check for permissions
         if (!hasPremissions(this, permissions)) {
             // if still not granted then ask permission
             ActivityCompat.requestPermissions(this, permissions, PERMISSION_CODE);
         }
-
         RequestHelper.getNowPlayingMovies(this);
         RequestHelper.getTopRatedMovies(this);
         RequestHelper.getUpcomingMovies(this);
         RequestHelper.getMostPopularMovies(this);
-
+        registerNetworkReceiver(this);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // stop auto scroll when onPause
+        viewPager.stopAutoScroll();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // start auto scroll when onResume
+        viewPager.startAutoScroll();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if ((System.currentTimeMillis() - exitTime) > 2000) {
+            Toast.makeText(getApplicationContext(), "Press back again to exit",
+                    Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        } else {
+            finish();
+        }
+    }
+
 
     /* This method will
      * @return
@@ -167,6 +199,28 @@ public class HomeScreenActivity extends AppCompatActivity implements ResponseLis
         Log.e(TAG, "searchFail: " + error);
     }
 
+    @Override
+    public void connected() {
+        if (snackbar != null) {
+            snackbar.dismiss();
+            snackbar = null;
+        }
+    }
+
+    @Override
+    public void notConnected() {
+        if (snackbar == null) {
+            snackbar = Snackbar.make(findViewById(R.id.layout_homeScreen), "No internet connection!", Snackbar.LENGTH_INDEFINITE);
+            // Changing message text color
+            snackbar.setActionTextColor(Color.RED);
+
+            // Changing action button text color
+            View sbView = snackbar.getView();
+            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setTextColor(Color.YELLOW);
+            snackbar.show();
+        }
+    }
 
     public class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
 
@@ -175,9 +229,6 @@ public class HomeScreenActivity extends AppCompatActivity implements ResponseLis
             mPageIndexTv.setText(new StringBuilder().append((position) % topTenMoviePosters.size() + 1).append("/")
                     .append(topTenMoviePosters.size()));
             Log.d(TAG, "onPageSelected: " + position);
-            /*if (position == 9)
-                viewPager.setCurrentItem(0);
-            viewPager.startAutoScroll();*/
         }
 
         @Override
@@ -187,20 +238,6 @@ public class HomeScreenActivity extends AppCompatActivity implements ResponseLis
         @Override
         public void onPageScrollStateChanged(int arg0) {
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // stop auto scroll when onPause
-        viewPager.stopAutoScroll();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // start auto scroll when onResume
-        viewPager.startAutoScroll();
     }
 
     private void populatRecyclerView() {
@@ -237,4 +274,14 @@ public class HomeScreenActivity extends AppCompatActivity implements ResponseLis
                 break;
         }
     }
+
+    public void showLoader() {
+        findViewById(R.id.layout_loader_progress).setVisibility(View.VISIBLE);
+    }
+
+    public void hideLoader() {
+        findViewById(R.id.layout_loader_progress).setVisibility(View.INVISIBLE);
+    }
+
+
 }

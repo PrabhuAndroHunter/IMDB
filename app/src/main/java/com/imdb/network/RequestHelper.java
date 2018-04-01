@@ -7,6 +7,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.imdb.activity.HomeScreenActivity;
+import com.imdb.activity.MovieDetailsActivity;
 import com.imdb.application.Application;
 
 import org.json.JSONObject;
@@ -167,7 +168,7 @@ public class RequestHelper {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, "onErrorResponse: ");
-                listner.searchFail(error.getMessage(), HomeScreenActivity.NON);
+                listner.searchFail(error.getMessage(), MovieDetailsActivity.MOVIE_DETAILS);
             }
         });
         Application.getInstance().addToRequestQueue(getMovieDetailsReq);
@@ -185,7 +186,7 @@ public class RequestHelper {
 
                 // Call ResponseParser to parse the response
                 Log.d(TAG, "onResponse: ");
-                // ResponseParser.parseMovieDetails(response, listner);
+                 ResponseParser.parseMovieArtistDetails(response, listner);
             }
         }, new Response.ErrorListener() {
 

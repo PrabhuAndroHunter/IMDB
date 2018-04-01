@@ -14,16 +14,20 @@ public class MovieDetails {
     int revenue;
     String website;
     String language;
+    String imdbId;
+    String status;
     List <String> genresList;
     List <ProductionCompanies> productionCompaniesList;
 
-    public MovieDetails(String backdropPath, boolean adult, int budget, int revenue, String website, String language, List <String> genresList, List <ProductionCompanies> productionCompaniesList) {
+    public MovieDetails(String backdropPath, boolean adult, int budget, int revenue, String website, String language, String imdbId, String status, List <String> genresList, List <ProductionCompanies> productionCompaniesList) {
         this.backdropPath = backdropPath;
         this.adult = adult;
         this.budget = budget;
         this.revenue = revenue;
         this.website = website;
         this.language = language;
+        this.imdbId = imdbId;
+        this.status = status;
         this.genresList = genresList;
         this.productionCompaniesList = productionCompaniesList;
     }
@@ -50,6 +54,14 @@ public class MovieDetails {
 
     public String getLanguage() {
         return language;
+    }
+
+    public String getImdbId() {
+        return imdbId;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public List <String> getGenresList() {

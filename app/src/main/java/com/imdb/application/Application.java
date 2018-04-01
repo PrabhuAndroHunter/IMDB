@@ -3,11 +3,22 @@ package com.imdb.application;
 /**
  * Created by prabhu on 13/03/2018.
  */
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.imdb.R;
 import com.imdb.model.Movie;
 
 public class Application extends android.app.Application {
@@ -17,12 +28,15 @@ public class Application extends android.app.Application {
     private RequestQueue mRequestQueue;
     private static Application mInstance;
     private static Movie currentPlayingMovie;
+    public static boolean isNetWorkConnected = true;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        Log.d(TAG, "onCreate: ");
     }
+
 
     public static synchronized Application getInstance() {
         return mInstance;
@@ -59,4 +73,6 @@ public class Application extends android.app.Application {
     public static void setCurrentPlayingMovie(Movie currentPlayingMovie) {
         Application.currentPlayingMovie = currentPlayingMovie;
     }
+
+
 }

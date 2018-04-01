@@ -47,8 +47,6 @@ public class ViewAllMovieAdapter extends RecyclerView.Adapter <ViewAllMovieAdapt
     private int tag;
     List <Movie> movieList = new ArrayList <Movie>();
     Movie currentMovie;
-    public static final int TOP_RATED_MOVIE = 1, NOW_PLAYING = 2, UPCOMING_MOVIE = 3, POPULAR_MOVIE = 4;
-
 
     public ViewAllMovieAdapter(Context context, int tag) {
         this.context = context;
@@ -77,24 +75,32 @@ public class ViewAllMovieAdapter extends RecyclerView.Adapter <ViewAllMovieAdapt
         holder.mSeeMoreTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Application.setCurrentPlayingMovie(curMovie);
-                parentActivity.startActivity(new Intent(parentActivity, MovieDetailsActivity.class));
+                if (Application.isNetWorkConnected) {
+                    Application.setCurrentPlayingMovie(curMovie);
+                    parentActivity.startActivity(new Intent(parentActivity, MovieDetailsActivity.class));
+                } else {
+                    parentActivity.showNoNetworkToast();
+                }
             }
         });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Application.setCurrentPlayingMovie(curMovie);
-                String[] s = new String[5];
+                if (Application.isNetWorkConnected) {
+                    Application.setCurrentPlayingMovie(curMovie);
+                    String[] s = new String[5];
+                    s[0] = curMovie.getTitle();
+                    String urlstring = "http://api.themoviedb.org/3/movie/" + curMovie.getMovieId() + "/videos?api_key=8496be0b2149805afa458ab8ec27560c";
+                    s[1] = urlstring.replace(" ", "%20");
+                    s[2] = curMovie.getRating();
+                    s[3] = curMovie.getMovieId();
+                    s[4] = curMovie.getReleaseDate();
+                    new FetchNowPlayingMoviesData("TRAILER").execute(s);
+                } else {
+                    parentActivity.showNoNetworkToast();
+                }
 
-                s[0] = curMovie.getTitle();
-                String urlstring = "http://api.themoviedb.org/3/movie/" + curMovie.getMovieId() + "/videos?api_key=8496be0b2149805afa458ab8ec27560c";
-                s[1] = urlstring.replace(" ", "%20");
-                s[2] = curMovie.getRating();
-                s[3] = curMovie.getMovieId();
-                s[4] = curMovie.getReleaseDate();
-                new FetchNowPlayingMoviesData("TRAILER").execute(s);
             }
         });
     }
@@ -128,16 +134,12 @@ public class ViewAllMovieAdapter extends RecyclerView.Adapter <ViewAllMovieAdapt
 
     private class FetchNowPlayingMoviesData extends AsyncTask <String, Void, Void> {
         String tag;
-        ProgressDialog progressDialog = new ProgressDialog(parentActivity);
         String content;
         String error;
         String title = "";
         String rating = "";
         String movieId = "";
         String year = "";
-        Movie m;
-        ArrayList <Movie> movieArrayList = new ArrayList <Movie>();
-        ListAdapter mAdapter;
 
         public FetchNowPlayingMoviesData(String s) {
             tag = s;
@@ -146,8 +148,7 @@ public class ViewAllMovieAdapter extends RecyclerView.Adapter <ViewAllMovieAdapt
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog.setMessage("Please Wait....");
-            progressDialog.show();
+            parentActivity.showLoader();
         }
 
         @Override
@@ -198,7 +199,7 @@ public class ViewAllMovieAdapter extends RecyclerView.Adapter <ViewAllMovieAdapt
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            progressDialog.dismiss();
+            parentActivity.hideLoader();
             if (error != null) {
                 Toast.makeText(parentActivity, error, Toast.LENGTH_LONG).show();
             } else {

@@ -6,18 +6,23 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.imdb.R;
 import com.imdb.adapter.ViewAllMovieAdapter;
 import com.imdb.adapter.RecyclerViewAdapter;
+import com.imdb.application.BaseActivity;
 import com.imdb.model.Movie;
 import com.imdb.network.RequestHelper;
 import com.imdb.network.ResponseListener;
 
+import java.text.DecimalFormat;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class ViewAllMovieActivity extends AppCompatActivity implements ResponseListener {
+public class ViewAllMovieActivity extends BaseActivity implements ResponseListener {
     private final String TAG = ViewAllMovieActivity.class.toString();
     private RecyclerView mviewAllMovieRv;
     private ViewAllMovieAdapter viewAllMovieAdapter;
@@ -85,4 +90,13 @@ public class ViewAllMovieActivity extends AppCompatActivity implements ResponseL
         super.onBackPressed();
         overridePendingTransition(R.anim.no_change, R.anim.slide_out_right);
     }
+
+    public void showLoader(){
+        findViewById(R.id.layout_loader_progress).setVisibility(View.VISIBLE);
+    }
+
+    public void hideLoader(){
+        findViewById(R.id.layout_loader_progress).setVisibility(View.INVISIBLE);
+    }
+
 }

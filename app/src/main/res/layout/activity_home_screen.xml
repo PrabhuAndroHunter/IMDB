@@ -1,267 +1,291 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:background="@color/colorBackground"
-        tools:context="com.imdb.activity.HomeScreenActivity">
+        android:id="@+id/layout_loader_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@color/colorPrimary"
+        android:elevation="5dp"
+        android:padding="20dp"
+        android:visibility="invisible">
 
-        <RelativeLayout
-            android:id="@+id/layout_topfiveposter"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:elevation="1dp">
-
-            <cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager
-                android:id="@+id/view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/colorBackgroundLight" />
-
-            <TextView
-                android:id="@+id/text_view_page_index"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:padding="10dp"
-                android:text="index" />
-        </RelativeLayout>
-
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/layout_now_playing"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/layout_topfiveposter"
-            android:background="#BCAAA4"
-            android:elevation="3dp"
-            card_view:cardCornerRadius="0dp"
-            card_view:cardElevation="@dimen/cardview_default_elevation">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorAllPosterBackground">
-
-                <TextView
-                    android:id="@+id/text_view_now_playing"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="Now Playing"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_margin="3dp">
-
-                    <TextView
-                        android:id="@+id/text_view_now_playing_view_all"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:onClick="onViewAllClick"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:text="View All"
-                        android:textColor="@color/colorHintTextTitle" />
-                </LinearLayout>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_view_now_playing"
-                    android:layout_width="fill_parent"
-                    android:layout_height="200dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/text_view_now_playing"
-                    android:scrollbars="none"
-                    tools:listitem="@layout/item_row" />
-            </RelativeLayout>
-
-        </android.support.v7.widget.CardView>
-
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/layout_top_rated"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/layout_now_playing"
-            android:layout_marginTop="1dp"
-            android:background="#BCAAA4"
-            android:elevation="3dp"
-            card_view:cardCornerRadius="0dp"
-            card_view:cardElevation="@dimen/cardview_default_elevation">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorAllPosterBackground">
-
-                <TextView
-                    android:id="@+id/text_view_top_rated"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="Top Rated"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_margin="3dp">
-
-                    <TextView
-                        android:id="@+id/text_view_top_rating_view_all"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:onClick="onViewAllClick"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:text="View All"
-                        android:textColor="@color/colorHintTextTitle" />
-                </LinearLayout>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_view_top_rated"
-                    android:layout_width="fill_parent"
-                    android:layout_height="200dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/text_view_top_rated"
-                    android:scrollbars="none"
-                    tools:listitem="@layout/item_row" />
-
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/layout_upcoming"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/layout_top_rated"
-            android:layout_marginTop="1dp"
-            android:background="#BCAAA4"
-            android:elevation="3dp"
-            card_view:cardCornerRadius="0dp"
-            card_view:cardElevation="@dimen/cardview_default_elevation">
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorAllPosterBackground">
-
-                <TextView
-                    android:id="@+id/text_view_upcoming"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="UpComing"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_margin="3dp">
-
-                    <TextView
-                        android:id="@+id/text_view_up_coming_view_all"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:onClick="onViewAllClick"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:text="View All"
-                        android:textColor="@color/colorHintTextTitle" />
-
-                </LinearLayout>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_view_upcoming"
-                    android:layout_width="fill_parent"
-                    android:layout_height="200dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/text_view_upcoming"
-                    android:scrollbars="none"
-                    tools:listitem="@layout/item_row" />
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/layout_popular"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/layout_upcoming"
-            android:layout_marginTop="1dp"
-            android:background="#BCAAA4"
-            android:elevation="3dp"
-            card_view:cardCornerRadius="0dp"
-            card_view:cardElevation="@dimen/cardview_default_elevation">
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorAllPosterBackground">
-
-                <TextView
-                    android:id="@+id/text_view_popular"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="Most Popular"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_margin="3dp">
-
-                    <TextView
-                        android:id="@+id/text_view_popular_view_all"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:onClick="onViewAllClick"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:text="View All"
-                        android:textColor="@color/colorHintTextTitle" />
-                </LinearLayout>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_view_popular"
-                    android:layout_width="fill_parent"
-                    android:layout_height="200dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/text_view_popular"
-                    android:scrollbars="none"
-                    tools:listitem="@layout/item_row" />
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-
-
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/loader_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:elevation="5dp"
+            android:visibility="visible"
+            app:indicator="BallBeat"
+            app:indicator_color="#65dede" />
     </RelativeLayout>
 
-</ScrollView>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <RelativeLayout
+            android:id="@+id/layout_homeScreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorBackground"
+            tools:context="com.imdb.activity.HomeScreenActivity">
+
+            <RelativeLayout
+                android:id="@+id/layout_topfiveposter"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:elevation="1dp">
+
+                <cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager
+                    android:id="@+id/view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/colorBackgroundLight" />
+
+                <TextView
+                    android:id="@+id/text_view_page_index"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:padding="10dp"
+                    android:text="index" />
+            </RelativeLayout>
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/layout_now_playing"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/layout_topfiveposter"
+                android:background="#BCAAA4"
+                android:elevation="3dp"
+                card_view:cardCornerRadius="0dp"
+                card_view:cardElevation="@dimen/cardview_default_elevation">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorAllPosterBackground">
+
+                    <TextView
+                        android:id="@+id/text_view_now_playing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Now Playing"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="3dp">
+
+                        <TextView
+                            android:id="@+id/text_view_now_playing_view_all"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:onClick="onViewAllClick"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:text="View All"
+                            android:textColor="@color/colorHintTextTitle" />
+                    </LinearLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view_now_playing"
+                        android:layout_width="fill_parent"
+                        android:layout_height="200dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/text_view_now_playing"
+                        android:scrollbars="none"
+                        tools:listitem="@layout/item_row" />
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/layout_top_rated"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/layout_now_playing"
+                android:layout_marginTop="1dp"
+                android:background="#BCAAA4"
+                android:elevation="3dp"
+                card_view:cardCornerRadius="0dp"
+                card_view:cardElevation="@dimen/cardview_default_elevation">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorAllPosterBackground">
+
+                    <TextView
+                        android:id="@+id/text_view_top_rated"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Top Rated"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="3dp">
+
+                        <TextView
+                            android:id="@+id/text_view_top_rating_view_all"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:onClick="onViewAllClick"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:text="View All"
+                            android:textColor="@color/colorHintTextTitle" />
+                    </LinearLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view_top_rated"
+                        android:layout_width="fill_parent"
+                        android:layout_height="200dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/text_view_top_rated"
+                        android:scrollbars="none"
+                        tools:listitem="@layout/item_row" />
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/layout_upcoming"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/layout_top_rated"
+                android:layout_marginTop="1dp"
+                android:background="#BCAAA4"
+                android:elevation="3dp"
+                card_view:cardCornerRadius="0dp"
+                card_view:cardElevation="@dimen/cardview_default_elevation">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorAllPosterBackground">
+
+                    <TextView
+                        android:id="@+id/text_view_upcoming"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="UpComing"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="3dp">
+
+                        <TextView
+                            android:id="@+id/text_view_up_coming_view_all"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:onClick="onViewAllClick"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:text="View All"
+                            android:textColor="@color/colorHintTextTitle" />
+
+                    </LinearLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view_upcoming"
+                        android:layout_width="fill_parent"
+                        android:layout_height="200dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/text_view_upcoming"
+                        android:scrollbars="none"
+                        tools:listitem="@layout/item_row" />
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/layout_popular"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/layout_upcoming"
+                android:layout_marginTop="1dp"
+                android:background="#BCAAA4"
+                android:elevation="3dp"
+                card_view:cardCornerRadius="0dp"
+                card_view:cardElevation="@dimen/cardview_default_elevation">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorAllPosterBackground">
+
+                    <TextView
+                        android:id="@+id/text_view_popular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Most Popular"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="3dp">
+
+                        <TextView
+                            android:id="@+id/text_view_popular_view_all"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:onClick="onViewAllClick"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:text="View All"
+                            android:textColor="@color/colorHintTextTitle" />
+                    </LinearLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view_popular"
+                        android:layout_width="fill_parent"
+                        android:layout_height="200dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/text_view_popular"
+                        android:scrollbars="none"
+                        tools:listitem="@layout/item_row" />
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

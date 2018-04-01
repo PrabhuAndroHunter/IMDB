@@ -73,16 +73,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Application.setCurrentPlayingMovie(curMovie);
-                String[] s = new String[5];
+               if (Application.isNetWorkConnected){
+                   Application.setCurrentPlayingMovie(curMovie);
+                   String[] s = new String[5];
 
-                s[0] = curMovie.getTitle();
-                String urlstring = "http://api.themoviedb.org/3/movie/" + curMovie.getMovieId() + "/videos?api_key=8496be0b2149805afa458ab8ec27560c";
-                s[1] = urlstring.replace(" ", "%20");
-                s[2] = curMovie.getRating();
-                s[3] = curMovie.getMovieId();
-                s[4] = curMovie.getReleaseDate();
-                new FetchNowPlayingMoviesData("TRAILER").execute(s);
+                   s[0] = curMovie.getTitle();
+                   String urlstring = "http://api.themoviedb.org/3/movie/" + curMovie.getMovieId() + "/videos?api_key=8496be0b2149805afa458ab8ec27560c";
+                   s[1] = urlstring.replace(" ", "%20");
+                   s[2] = curMovie.getRating();
+                   s[3] = curMovie.getMovieId();
+                   s[4] = curMovie.getReleaseDate();
+                   new FetchNowPlayingMoviesData("TRAILER").execute(s);
+               }else {
+                   parentActivity.showNoNetworkToast();
+               }
             }
         });
     }
@@ -112,7 +116,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
 
     private class FetchNowPlayingMoviesData extends AsyncTask <String, Void, Void> {
         String tag;
-        ProgressDialog progressDialog = new ProgressDialog(parentActivity);
         String content;
         String error;
         String title = "";
@@ -130,8 +133,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog.setMessage("Please Wait....");
-            progressDialog.show();
+            parentActivity.showLoader();
         }
 
         @Override
@@ -182,7 +184,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            progressDialog.dismiss();
+            parentActivity.hideLoader();
             if (error != null) {
                 Toast.makeText(parentActivity, error, Toast.LENGTH_LONG).show();
             } else {
