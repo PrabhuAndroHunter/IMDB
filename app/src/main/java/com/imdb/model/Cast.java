@@ -4,10 +4,15 @@ package com.imdb.model;
  * Created by prabhu on 20/3/18.
  */
 
+/*
+*
+* This class has all details about Cast
+*
+* */
 public class Cast {
-        int castId, id;
-        String character, name, profilePath;
-        String gender;
+    int castId, id;
+    String character, name, profilePath;
+    String gender;
 
     public Cast(int castId, int id, String character, String name, String profilePath, String gender) {
         this.castId = castId;

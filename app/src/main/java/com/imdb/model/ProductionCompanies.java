@@ -4,6 +4,12 @@ package com.imdb.model;
  * Created by prabhu on 20/3/18.
  */
 
+/*
+*
+* This class has all details about ProductionCompanies
+*
+* */
+
 public class ProductionCompanies {
     int id;
     String name;

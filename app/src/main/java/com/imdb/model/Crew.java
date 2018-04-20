@@ -4,6 +4,11 @@ package com.imdb.model;
  * Created by prabhu on 29/3/18.
  */
 
+/*
+*
+* This class has all details about Crew
+*
+* */
 public class Crew {
     int id;
     String creditId, name, department, job, profilePath;

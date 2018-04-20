@@ -33,7 +33,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart: ");
-
+        // Register broadcast receiver to get Network Status
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         IntentFilter networkstatusFilter = new IntentFilter(intentFilter);
@@ -59,10 +59,10 @@ public class BaseActivity extends AppCompatActivity {
         unregisterReceiver(netWorkStatusReciever);
     }
 
+    // This will get Called when there is a change in network status
     BroadcastReceiver netWorkStatusReciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
             boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();

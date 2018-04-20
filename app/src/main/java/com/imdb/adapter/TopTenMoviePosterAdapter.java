@@ -1,6 +1,5 @@
 package com.imdb.adapter;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,7 +82,7 @@ public class TopTenMoviePosterAdapter extends PagerAdapter {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: " + curMovie.getTitle());
 
-                if (Application.isNetWorkConnected){
+                if (Application.isNetWorkConnected) {
                     Application.setCurrentPlayingMovie(curMovie);
                     String[] s = new String[5];
 
@@ -95,13 +93,11 @@ public class TopTenMoviePosterAdapter extends PagerAdapter {
                     s[3] = curMovie.getMovieId();
                     s[4] = curMovie.getReleaseDate();
                     new FetchNowPlayingMoviesData("TRAILER").execute(s);
-                }
-                else {
+                } else {
                     parentActivity.showNoNetworkToast();
                 }
             }
         });
-
         container.addView(itemView);
         return itemView;
     }
@@ -124,8 +120,6 @@ public class TopTenMoviePosterAdapter extends PagerAdapter {
         String rating = "";
         String movieId = "";
         String year = "";
-        ArrayList <Movie> movieArrayList = new ArrayList <Movie>();
-        ListAdapter mAdapter;
 
         public FetchNowPlayingMoviesData(String s) {
             tag = s;
@@ -172,7 +166,7 @@ public class TopTenMoviePosterAdapter extends PagerAdapter {
             } finally {
                 try {
                     if (br != null)
-                    br.close();
+                        br.close();
                 } catch (IOException e) {
                     error = e.getMessage();
                     e.printStackTrace();
@@ -198,13 +192,10 @@ public class TopTenMoviePosterAdapter extends PagerAdapter {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             String type = jsonArray.getJSONObject(i).getString("type");
                             String key = jsonArray.getJSONObject(i).getString("key");
-
                             HashMap <String, String> map = new HashMap <>();
                             map.put(type, key);
                             videoList.add(map);
-
                         }
-
                         Bundle movieBundle = new Bundle();
                         movieBundle.putString("title", title);
                         movieBundle.putString("rating", rating);

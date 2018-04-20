@@ -1,6 +1,5 @@
 package com.imdb.adapter;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -122,9 +120,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         String rating = "";
         String movieId = "";
         String year = "";
-        Movie m;
-        ArrayList <Movie> movieArrayList = new ArrayList <Movie>();
-        ListAdapter mAdapter;
 
         public FetchNowPlayingMoviesData(String s) {
             tag = s;
@@ -140,8 +135,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         protected Void doInBackground(String... s) {
             BufferedReader br = null;
             URL url = null;
-
-
             try {
                 if (tag.equals("TRAILER")) {
                     url = new URL(s[1]);

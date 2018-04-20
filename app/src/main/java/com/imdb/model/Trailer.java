@@ -4,6 +4,12 @@ package com.imdb.model;
  * Created by prabhu on 20/3/18.
  */
 
+/*
+*
+* This class has all details about Trailers
+*
+* */
+
 public class Trailer {
     private String name;
     private String vedioLink;

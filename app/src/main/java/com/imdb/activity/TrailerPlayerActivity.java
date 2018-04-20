@@ -3,12 +3,9 @@ package com.imdb.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.speech.tts.TextToSpeech;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,11 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeApiServiceUtil;
-import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
-import com.google.android.youtube.player.YouTubePlayerView;
 import com.imdb.R;
 import com.imdb.adapter.RecyclerViewAdapter;
 import com.imdb.adapter.RecyclerViewTrailerAdapter;
@@ -37,7 +32,6 @@ import com.imdb.network.Url;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -55,14 +49,22 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer.OnInitializedListener, ResponseListener {
+/*
+*
+* This is the Activity where user can watch trailers and movie video clips
+*
+* */
 
+public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer.OnInitializedListener, ResponseListener {
     private final String TAG = TrailerPlayerActivity.class.toString();
     private TextView mVoteTv, mRatingTv, mRateThisTv, mShareTv, mWatchLater, mDescriptionTv, mReleaseDate, mMovieStatus;
-    YouTubePlayer player;
+    private YouTubePlayer player;
     private RecyclerView mTrailerRv;
-    String videoKey = "";
+    RatingBar mRatingBarFirst, mRatingBarSecond;
+    Button mSubmitBtn;
+    TextView mUserRatingTv;
     Bundle bundle;
+    String videoKey = "";
     ArrayList <HashMap <String, String>> videoList;
     private List <Trailer> trailerList = new ArrayList <Trailer>();
     private Movie currentMovie;
@@ -72,26 +74,14 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
     private String imdbId, status;
     String guest_session_id = "";
 
-
-    RatingBar mRatingBarFirst, mRatingBarSecond;
-    Button mSubmitBtn;
-    TextView mUserRatingTv;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // init layout
         setContentView(R.layout.activity_trailer_player);
-        mTrailerRv = (RecyclerView) findViewById(R.id.recycler_view_trailer);
-        mVoteTv = (TextView) findViewById(R.id.text_view_vote);
-        mRatingTv = (TextView) findViewById(R.id.text_view_votestar);
-        mRateThisTv = (TextView) findViewById(R.id.text_view_rateings);
-        mShareTv = (TextView) findViewById(R.id.text_view_share);
-        mWatchLater = (TextView) findViewById(R.id.text_view_watchlist);
-        mDescriptionTv = (TextView) findViewById(R.id.text_view_movie_description);
-        mReleaseDate = (TextView) findViewById(R.id.text_view_release_date);
-        mMovieStatus = (TextView) findViewById(R.id.text_view_staus);
+        // init all views
+        initViews();
         mTrailerRv.setLayoutManager(new LinearLayoutManager(TrailerPlayerActivity.this, LinearLayoutManager.HORIZONTAL, false));
-
         bundle = getIntent().getBundleExtra("movie");
         videoList = (ArrayList <HashMap <String, String>>) getIntent().getSerializableExtra("videoIdList");
         final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(this);
@@ -100,12 +90,13 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
             result.getErrorDialog(this, 0).show();
             this.finish();
         }
-        YouTubePlayerSupportFragment frag =
-                (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube_playerview);
+
+        YouTubePlayerSupportFragment frag = (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube_playerview);
         frag.initialize(Url.YOUTUBE_API_KEY, this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("IMDB Player");
 
+        // Make trailer list
         for (HashMap <String, String> map : videoList) {
             for (Map.Entry <String, String> mapEntry : map.entrySet()) {
                 String name = mapEntry.getKey();
@@ -114,9 +105,12 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
                 trailerList.add(trailer);
             }
         }
+
+        // Get First trailer video key to set Default video
         if (trailerList.size() > 0)
             videoKey = trailerList.get(0).getVedioLink();
 
+        // This will called when User Click on rating button
         mRateThisTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,6 +118,10 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
             }
         });
 
+        /*
+        * This will called when User Click on Watch button
+        * But there is no logic implemented Only Ui changes are done
+        * */
         mWatchLater.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,6 +139,7 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
             }
         });
 
+        // This will called when User Click on Share button
         mShareTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,7 +156,22 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
                 }
             }
         });
+
+        // Load all trailers
         loadTrailers();
+    }
+
+    // This method will init all views
+    private void initViews() {
+        mTrailerRv = (RecyclerView) findViewById(R.id.recycler_view_trailer);
+        mVoteTv = (TextView) findViewById(R.id.text_view_vote);
+        mRatingTv = (TextView) findViewById(R.id.text_view_votestar);
+        mRateThisTv = (TextView) findViewById(R.id.text_view_rateings);
+        mShareTv = (TextView) findViewById(R.id.text_view_share);
+        mWatchLater = (TextView) findViewById(R.id.text_view_watchlist);
+        mDescriptionTv = (TextView) findViewById(R.id.text_view_movie_description);
+        mReleaseDate = (TextView) findViewById(R.id.text_view_release_date);
+        mMovieStatus = (TextView) findViewById(R.id.text_view_staus);
     }
 
     @Override
@@ -166,12 +180,14 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
         return true;
     }
 
+    // This method will get called when user press backButton
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.no_change, R.anim.slide_out_right);
     }
 
+    // This callback will get called When YOUTUBE is initialized Successfully
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean b) {
         Log.i("player", "player is playing");
@@ -195,27 +211,33 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
     @Override
     protected void onStart() {
         super.onStart();
+        // Get Current movie(User selected movie)
         currentMovie = Application.getCurrentPlayingMovie();
+        Log.d(TAG, "onStart: " + currentMovie.getTitle());
+        // Request for movie details
         RequestHelper.getMovieDetails(currentMovie.getMovieId(), this);
+        // update UI
         mVoteTv.setText("" + currentMovie.getVoteCount());
         mRatingTv.setText(currentMovie.getRating());
         mReleaseDate.setText(currentMovie.getReleaseDate());
         mDescriptionTv.setText(currentMovie.getDescription());
-        Log.d(TAG, "onStart: " + currentMovie.getTitle());
     }
 
+    // This method will load Trailer data to views
     private void loadTrailers() {
         trailersAdapter = new RecyclerViewTrailerAdapter(this, RecyclerViewAdapter.NOW_PLAYING);
         mTrailerRv.setAdapter(trailersAdapter);
         trailersAdapter.refreshUI(trailerList);
     }
 
+    // This method will update Trailer to main Youtube player view
     public void updateTrailer(String videoKey) {
         this.videoKey = videoKey;
         player.cueVideo(videoKey);
         player.play();
     }
 
+    // This callback will get called when all requested data parsed successfully
     @Override
     public void searchDone(Object object, String tag) {
         MovieDetails movieDetails = (MovieDetails) object;
@@ -229,11 +251,12 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
 
     }
 
+    // This callback will get called when fail to get data from the IMDB server
     @Override
     public void searchFail(String error, String tag) {
-
     }
 
+    // This method will manage Rating dialogue visibility and user events.
     private void showRatingdialog() {
         final Dialog ratingDialog = new Dialog(this);
         ratingDialog.setContentView(R.layout.item_rating);
@@ -244,9 +267,9 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
         mRatingBarSecond = (RatingBar) ratingDialog.findViewById(R.id.ratingBar2);
         mUserRatingTv = (TextView) ratingDialog.findViewById(R.id.textview_user_rating);
         mSubmitBtn = (Button) ratingDialog.findViewById(R.id.button_submit);
-
         mRatingBarSecond.setEnabled(false);
 
+        // Set onclick listener on First Row Rating bar
         mRatingBarFirst.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
@@ -257,6 +280,7 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
             }
         });
 
+        // Set onclick listener on Second Row Rating bar
         mRatingBarSecond.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
@@ -267,6 +291,7 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
             }
         });
 
+        // Set onclick listener on Submit buton
         mSubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -277,6 +302,7 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
         ratingDialog.show();
     }
 
+    // This will manage Visibility of first row rating bar
     private void updateRatingFirst(float userRating) {
         ratingOne = userRating;
         mUserRatingTv.setText("" + ratingOne);
@@ -289,6 +315,7 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
         }
     }
 
+    // This will manage Visibility of second row rating bar
     private void updateRatingSecond(float userRating) {
         ratingTwo = ratingOne + userRating;
         mUserRatingTv.setText("" + ratingTwo);
@@ -302,6 +329,7 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
         }
     }
 
+    // This AsyncTask will manage to Post User Rating
     private class PostRatingData extends AsyncTask <String, Void, String> {
 
         PostRatingData() {
@@ -373,11 +401,11 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
         @Override
         protected void onPostExecute(String result) {
 
-            Log.d(TAG, "onPostExecute: "+result);
+            Log.d(TAG, "onPostExecute: " + result);
             if (result.equalsIgnoreCase("Fail")) {
                 Toast.makeText(getApplicationContext(), result,
                         Toast.LENGTH_LONG).show();
-            }else {
+            } else {
                 Toast.makeText(getApplicationContext(), "Submitted",
                         Toast.LENGTH_LONG).show();
             }
@@ -405,14 +433,13 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
             result.append(URLEncoder.encode(key, "UTF-8"));
             result.append("=");
             result.append(URLEncoder.encode(value.toString(), "UTF-8"));
-
         }
         return result.toString();
     }
 
+    // This AsyncTask will manage to get guest session ID to post User ratings
     private class GetSessionId extends AsyncTask <String, Void, String> {
         String error = null;
-
 
         @Override
         protected void onPreExecute() {
@@ -424,24 +451,19 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
             BufferedReader br = null;
             URL url = null;
             String content = "";
-
             try {
                 url = new URL(strings[0]);
                 Log.i("Session url", url.toString());
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 int responseCode = connection.getResponseCode();
                 Log.d("Status", responseCode + "");
-
                 br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line = null;
-
                 while ((line = br.readLine()) != null) {
                     sb.append(line + "\n");
-
                 }
                 content = sb.toString();
-
             } catch (MalformedURLException e) {
                 error = e.getMessage();
                 e.printStackTrace();
@@ -462,15 +484,11 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
 
         @Override
         protected void onPostExecute(String result) {
-
             super.onPostExecute(result);
-
             if (error != null) {
                 Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
-
             } else {
                 try {
-
                     JSONObject respone = new JSONObject(result);
                     String session_id = respone.getString("guest_session_id");
                     guest_session_id = session_id;
@@ -483,4 +501,3 @@ public class TrailerPlayerActivity extends BaseActivity implements YouTubePlayer
         }
     }
 }
-

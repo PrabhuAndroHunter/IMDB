@@ -3,22 +3,13 @@ package com.imdb.application;
 /**
  * Created by prabhu on 13/03/2018.
  */
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.support.design.widget.Snackbar;
+
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.imdb.R;
 import com.imdb.model.Movie;
 
 public class Application extends android.app.Application {
@@ -37,7 +28,6 @@ public class Application extends android.app.Application {
         Log.d(TAG, "onCreate: ");
     }
 
-
     public static synchronized Application getInstance() {
         return mInstance;
     }
@@ -49,13 +39,13 @@ public class Application extends android.app.Application {
         return mRequestQueue;
     }
 
-    public  void addToRequestQueue(Request req, String tag) {
+    public void addToRequestQueue(Request req, String tag) {
         // set the default tag if tag is empty
         req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
         getRequestQueue().add(req);
     }
 
-    public  void addToRequestQueue(Request req) {
+    public void addToRequestQueue(Request req) {
         req.setTag(TAG);
         getRequestQueue().add(req);
     }
@@ -73,6 +63,4 @@ public class Application extends android.app.Application {
     public static void setCurrentPlayingMovie(Movie currentPlayingMovie) {
         Application.currentPlayingMovie = currentPlayingMovie;
     }
-
-
 }

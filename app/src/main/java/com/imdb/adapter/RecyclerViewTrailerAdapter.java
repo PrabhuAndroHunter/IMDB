@@ -13,7 +13,6 @@ import com.bumptech.glide.Glide;
 import com.imdb.R;
 import com.imdb.activity.TrailerPlayerActivity;
 import com.imdb.application.Application;
-import com.imdb.model.Movie;
 import com.imdb.model.Trailer;
 
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ public class RecyclerViewTrailerAdapter extends RecyclerView.Adapter <RecyclerVi
     Context context;
     private int tag;
     List <Trailer> trailerList = new ArrayList <Trailer>();
-    public static final int TOP_RATED_MOVIE = 1, NOW_PLAYING = 2, UPCOMING_MOVIE = 3, POPULAR_MOVIE = 4;
     private TrailerPlayerActivity parentActivity;
 
     public RecyclerViewTrailerAdapter(Context context, int tag) {

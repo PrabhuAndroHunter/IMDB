@@ -6,6 +6,12 @@ import java.util.List;
  * Created by prabhu on 20/3/18.
  */
 
+/*
+*
+* This class has all details about Movie
+*
+* */
+
 public class MovieDetails {
 
     private String backdropPath;

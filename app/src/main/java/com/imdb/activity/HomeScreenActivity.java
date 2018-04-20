@@ -31,6 +31,12 @@ import java.util.List;
 
 import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 
+/*
+*
+* This is the HomeScreen of the Application
+*
+* */
+
 public class HomeScreenActivity extends BaseActivity implements ResponseListener, NetworkStateListener {
     private final String TAG = HomeScreenActivity.class.toString();
     private RecyclerView mNowPlayingRv, mTopRatedRv, mUpcomingRv, mPopularRv;
@@ -48,7 +54,6 @@ public class HomeScreenActivity extends BaseActivity implements ResponseListener
     public static final String POPULAR = "popular";
     public static final String NON = "non";
     private long exitTime;
-
     Snackbar snackbar = null;
 
     @Override
@@ -56,8 +61,9 @@ public class HomeScreenActivity extends BaseActivity implements ResponseListener
         super.onCreate(savedInstanceState);
         // init layout
         setContentView(R.layout.activity_home_screen);
+        Log.d(TAG, "onCreate: ");
+        // Init All views
         viewPager = (AutoScrollViewPager) findViewById(R.id.view_pager);
-
         mNowPlayingRv = (RecyclerView) findViewById(R.id.recycler_view_now_playing);
         mTopRatedRv = (RecyclerView) findViewById(R.id.recycler_view_top_rated);
         mUpcomingRv = (RecyclerView) findViewById(R.id.recycler_view_upcoming);
@@ -68,6 +74,8 @@ public class HomeScreenActivity extends BaseActivity implements ResponseListener
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG, "onStart: ");
+        // Set layout Managers to recycler views to make it Horizontal
         mNowPlayingRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mTopRatedRv.setLayoutManager(new LinearLayoutManager(HomeScreenActivity.this, LinearLayoutManager.HORIZONTAL, false));
         mUpcomingRv.setLayoutManager(new LinearLayoutManager(HomeScreenActivity.this, LinearLayoutManager.HORIZONTAL, false));
@@ -76,14 +84,13 @@ public class HomeScreenActivity extends BaseActivity implements ResponseListener
         topTenPosterAdapter = new TopTenMoviePosterAdapter(this);
         viewPager.setAdapter(topTenPosterAdapter);
         viewPager.addOnPageChangeListener(new MyOnPageChangeListener());
-
-        viewPager.setInterval(2000);
-        viewPager.startAutoScroll();
-        viewPager.setCycle(true);
+        viewPager.setInterval(2000); // Set delay for change poster
+        viewPager.startAutoScroll(); // Set as autoScroll
+        viewPager.setCycle(true);  // SetCycle true to start end it ends
         viewPager.setBorderAnimation(true);
         viewPager.setStopScrollWhenTouch(true);
         viewPager.setSlideBorderMode(AutoScrollViewPager.SLIDE_BORDER_MODE_TO_PARENT);
-        viewPager.setCurrentItem(0, true);
+        viewPager.setCurrentItem(0, true); // Set First item as default item
         populatRecyclerView();
 
         // check for permissions
@@ -91,6 +98,7 @@ public class HomeScreenActivity extends BaseActivity implements ResponseListener
             // if still not granted then ask permission
             ActivityCompat.requestPermissions(this, permissions, PERMISSION_CODE);
         }
+        // Query for all data
         RequestHelper.getNowPlayingMovies(this);
         RequestHelper.getTopRatedMovies(this);
         RequestHelper.getUpcomingMovies(this);
@@ -101,6 +109,7 @@ public class HomeScreenActivity extends BaseActivity implements ResponseListener
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d(TAG, "onPause: ");
         // stop auto scroll when onPause
         viewPager.stopAutoScroll();
     }
@@ -108,17 +117,21 @@ public class HomeScreenActivity extends BaseActivity implements ResponseListener
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume: ");
         // start auto scroll when onResume
         viewPager.startAutoScroll();
     }
 
     @Override
     protected void onStop() {
+        Log.d(TAG, "onStop: ");
         super.onStop();
     }
 
+    // This method will get called when user press backButton
     @Override
     public void onBackPressed() {
+        Log.d(TAG, "onBackPressed: ");
         if ((System.currentTimeMillis() - exitTime) > 2000) {
             Toast.makeText(getApplicationContext(), "Press back again to exit",
                     Toast.LENGTH_SHORT).show();
@@ -134,7 +147,6 @@ public class HomeScreenActivity extends BaseActivity implements ResponseListener
      * true --> if the permission is already granted
      * false --> if the permission is not granted yet
      */
-
     private boolean hasPremissions(Context context, String... permissions) {
         if (permissions != null) {
             for (String permission : permissions) {
@@ -150,10 +162,12 @@ public class HomeScreenActivity extends BaseActivity implements ResponseListener
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // check if the user Accespted the permission or not
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // If granted Say Thank You
             Toast.makeText(this, "Thank You", Toast.LENGTH_SHORT).show();
         }
     }
 
+    // This callback will get called after data parsed successfully
     @Override
     public void searchDone(Object object, String tag) {
         switch (tag) {
@@ -186,6 +200,7 @@ public class HomeScreenActivity extends BaseActivity implements ResponseListener
         }
     }
 
+    // This callback will get called if any error when getting data
     @Override
     public void searchFail(String error, String tag) {
         switch (tag) {
@@ -199,6 +214,7 @@ public class HomeScreenActivity extends BaseActivity implements ResponseListener
         Log.e(TAG, "searchFail: " + error);
     }
 
+    // This method will handle snackbar visibility when Phone have internet
     @Override
     public void connected() {
         if (snackbar != null) {
@@ -207,6 +223,7 @@ public class HomeScreenActivity extends BaseActivity implements ResponseListener
         }
     }
 
+    // This method will handle snackbar visibility when DonPhone have internet
     @Override
     public void notConnected() {
         if (snackbar == null) {
@@ -222,6 +239,7 @@ public class HomeScreenActivity extends BaseActivity implements ResponseListener
         }
     }
 
+    // This method will handle ViewPager change Listener
     public class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
 
         @Override
@@ -240,6 +258,7 @@ public class HomeScreenActivity extends BaseActivity implements ResponseListener
         }
     }
 
+    // This method will create RecyclerViewAdapter and set Adapter to the respective Recycler views
     private void populatRecyclerView() {
         topRatedMovieAdapter = new RecyclerViewAdapter(this, RecyclerViewAdapter.TOP_RATED_MOVIE);
         nowPlayingMovieAdapter = new RecyclerViewAdapter(this, RecyclerViewAdapter.NOW_PLAYING);
@@ -252,6 +271,7 @@ public class HomeScreenActivity extends BaseActivity implements ResponseListener
         mPopularRv.setAdapter(popularMovieAdapter);
     }
 
+    // This method will handle all "View All" button in mainScreen
     public void onViewAllClick(View view) {
         int viewId = view.getId();
         Intent intent = new Intent(this, ViewAllMovieActivity.class);
@@ -275,10 +295,12 @@ public class HomeScreenActivity extends BaseActivity implements ResponseListener
         }
     }
 
+    // This method will show loader when user click on any item in mainScreen
     public void showLoader() {
         findViewById(R.id.layout_loader_progress).setVisibility(View.VISIBLE);
     }
 
+    // This method will hide loader
     public void hideLoader() {
         findViewById(R.id.layout_loader_progress).setVisibility(View.INVISIBLE);
     }
